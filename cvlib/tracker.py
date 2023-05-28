@@ -20,7 +20,7 @@ class EuclideanDistTracker:
         # each time a new object id detected, the count will increase by one
         self.id_count = 0
         self.count = 0
-        self.limitq = LimitQueue(5)
+        self.limitq = LimitQueue(7)
 
     def update(self, objects_rect, liney, acceptable = 5, delta = 25):
         # Objects boxes and ids
@@ -45,7 +45,7 @@ class EuclideanDistTracker:
                     direction = -1
                 if dist < delta:
                     self.center_points[id] = (cx, cy)
-                    print(self.center_points)
+                    #print(self.center_points)
                     objects_bbs_ids.append([ux, uy, lx, ly, id, direction])
                     same_object_detected = True
                     break
