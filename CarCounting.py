@@ -37,7 +37,7 @@ cap_x, cap_y, cap_w, cap_h = 0, 0, width, height
 line = int(cap_h*0.70)
 show_cap = True
 # Distance scalar to increase the distance between two point to be consider as same object in case of high speed and low fps
-dis_scalar = (targer_counter+1)/targer_counter
+dis_scalar = (targer_counter+1)/targer_counter if frameCut else 1
 # Acceptable distance from line
 acceptable = 10
 # Video output in case of render is True
