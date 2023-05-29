@@ -36,7 +36,7 @@ class EuclideanDistTracker:
             same_object_detected = False
             for id, pt in self.center_points.items():
                 dist = math.hypot(cx - pt[0], cy - pt[1])
-                if cy < liney + acceptable and cy > liney - acceptable and self.limitq.contain(id) == False:
+                if cy < liney + acceptable and cy > liney - acceptable - 10 and self.limitq.contain(id) == False:
                     self.count+=1;
                     self.limitq.push(id)
                 if cy > pt[1]:

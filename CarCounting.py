@@ -71,7 +71,7 @@ while True:
             # cv2.line(roi, (0, line+acceptable), (cap_w, line+acceptable), (214, 214, 214), 2)
             # cv2.line(roi, (0, line-acceptable), (cap_w, line-acceptable), (214, 214, 214), 2)
             draw_with_alpha(roi, cv2.line, (0, line+acceptable), (cap_w, line+acceptable), (214, 214, 214), 2)
-            draw_with_alpha(roi, cv2.line, (0, line-acceptable-2), (cap_w, line-acceptable), (214, 214, 214), 2)
+            draw_with_alpha(roi, cv2.line, (0, line-acceptable-10), (cap_w, line-acceptable-10), (214, 214, 214), 2, 0.8)
         
         if len(results) > 0:
             presults = tracker.update( results, liney = line, acceptable = acceptable, delta = base_dis*dis_scalar)
