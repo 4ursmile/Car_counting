@@ -2,9 +2,8 @@ import cv2
 import numpy as np
 from cvlib.object_detection import ObjectDetection
 from cvlib.tracker import EuclideanDistTracker
-from ultralytics import YOLO
-import time
-video_name = 'camera2'
+
+video_name = 'camera3'
 video_capture = cv2.VideoCapture(f"./Videos/{video_name}.mp4")
 # Name for class
 class_ref =['car', 'motorbike']
@@ -22,7 +21,7 @@ def image_resize(img, dim):
 
 fps = video_capture.get(cv2.CAP_PROP_FPS)
 
-detector = ObjectDetection(conf = 0.35,iou=0.5)
+detector = ObjectDetection()
 tracker = EuclideanDistTracker()
 # Distance between two point to be consider as same object
 base_dis = 25
@@ -33,8 +32,8 @@ counter = 0;
 frameCut = False;
 # cut the frame to this size to reduce time to process
 # cap_x, cap_y, cap_w, cap_h = 200, 270, 420, 200 
-cap_x, cap_y, cap_w, cap_h = 0, 0, width, height 
-line = int(cap_h*0.70)
+cap_x, cap_y, cap_w, cap_h = 0, 0, width-100, height 
+line = int(cap_h*0.9)
 show_cap = True
 # Distance scalar to increase the distance between two point to be consider as same object in case of high speed and low fps
 dis_scalar = (targer_counter+1)/targer_counter if frameCut else 1
@@ -63,7 +62,7 @@ while True:
 
         frame = image_resize(frame, dim)
         roi = frame[cap_y:cap_y + cap_h, cap_x:cap_x + cap_w]
-        results, classes = detector.predict(roi, specific_class=take_class)
+        results, classes = detector.predict(roi, specific_class=take_class, conf = 0.3)
         if show_cap:
             #cv2.rectangle(frame, (cap_x, cap_y), (cap_x + cap_w, cap_y + cap_h), (255, 255, 0), 2)
             cv2.line(roi, (0, line), (cap_w, line), (107, 214, 205), 2)
@@ -80,14 +79,14 @@ while True:
                 cv2.rectangle(roi, (ux, uy), (lx, ly), (0, 220, 0), 2)
                 cv2.putText(roi, f"id: {str(id)}|{'in' if direction==1 else 'out'} class: {class_ref[classes[i]]}", (ux, uy - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         cv2.putText(frame, f"Vehicle Count: {str(tracker.count)}", (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+        cv2.putText(frame, f"Active car: {str(len(results))}", (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
         
         if render:
             video_results.write(frame)
         cv2.imshow("frame", frame)
     else:
-        video_capture.set(cv2.CAP_PROP_POS_FRAMES, 0)
+        break
         continue
-    waiting_time = int(1000/fps)
     key = cv2.waitKey(1)
     if key == ord('x'):
         break
