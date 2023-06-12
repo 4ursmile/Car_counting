@@ -8,7 +8,7 @@ video_capture = cv2.VideoCapture(f"./Videos/{video_name}.mp4")
 # Name for class
 class_ref =['car', 'motorbike']
 # Class to take set None to take all class
-take_class = [0]
+take_class = [1]
 # Is render the video
 render = True
 # Video resize
