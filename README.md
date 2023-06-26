@@ -13,7 +13,7 @@ pip install -r requirements.txt
 ```
 
 Now it's your C: 
-## **Insruction**
+## **Instruction**
 > [YOLOV8N-Vehicle](YOLOV8N-Vehicle) : Contain check point for YOLO V8 model (😊).
 > 
 > [cvlib](cvlib) : Is custom modules (by me) for this project.
