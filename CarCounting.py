@@ -19,7 +19,7 @@ dim = (width, height)
 def image_resize(img, dim):
     return cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
 
-model_list = ['yolov5n', 'yolov8n', 'rtdetr', 'yolov8no']
+model_list = ['yolov5n', 'yolov8n', 'rtdetr']
 fps = video_capture.get(cv2.CAP_PROP_FPS)
 
 model_chose = 0
