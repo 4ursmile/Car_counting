@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 from cvlib.object_detection import ObjectDetection
 from cvlib.tracker import EuclideanDistTracker
-
-video_name = 'camera1'
+import os
+video_name = 'camera4'
 video_capture = cv2.VideoCapture(f"./Videos/{video_name}.mp4")
 # Name for class
 class_ref =['auto rickshaw', 'bus', 'car', 'motorbike', 'truck']
@@ -43,19 +43,15 @@ dis_scalar = (targer_counter+1)/targer_counter if frameCut else 1
 acceptable = 30
 # Video output in case of render is True
 video_results = cv2.VideoWriter(f'Videos_ouput/{video_name}_result.avi',cv2.VideoWriter_fourcc('M','J','P','G'), fps, (width,height))
-
+if not os.path.exists(f'Videos_ouput'):
+    os.makedirs(f'Videos_ouput')
 def draw_with_alpha(img, draw_function, up, lp, color, width, alpha=0.5):
     overlay = np.zeros_like(img, dtype=np.uint8)
     draw_function(overlay, up, lp, color, width)
     mask = overlay.astype(bool)
     img[mask] = cv2.addWeighted(img, alpha, overlay, 1 - alpha, 0)[mask]
 
-per_vehicle_width = 100
-per_vehicle_space = 50
-dict_vehicle = {}
-for vehicle in class_ref:
-    dict_vehicle[vehicle] = 0
-print(dict_vehicle)
+
 while True:
     if frameCut:
         if counter == targer_counter:
@@ -93,7 +89,6 @@ while True:
         cv2.imshow("frame", frame)
     else:
         break
-        continue
     key = cv2.waitKey(1)
     if key == ord('x'):
         break
