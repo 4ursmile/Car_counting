@@ -1,5 +1,7 @@
 # **Car counting**
-## Using YOLOv8 and Euclid distance
+## Using Object Detection and Tracking for Car Counting
+---
+## Update GUI version with Streamlit 🎊
 ---
 
 Quickstart 
@@ -9,25 +11,29 @@ git clone https://github.com/4ursmile/Car_counting
 ```
 
 ```shell
+cd Car_counting
 pip install -r requirements.txt
 ```
 
 Now it's your C: 
 ## **Instruction**
-> [YOLOV8N-Vehicle](YOLOV8N-Vehicle) : Contain check point for YOLO V8 model (😊).
+> [Models](Models) : Contain check point for all models (😊).
 > 
 > [cvlib](cvlib) : Is custom modules (by me) for this project.
->
-> [cascada](cascade) : Contain checkpoint for haar cascade model.
 >
 > [Compare.ipynb](Compare.ipynb) : use to plot some figure.
 >
 > [Lab.ipynb](Lab.ipynb) : For reseach.
 >
-> [CarCounting.py](CarCounting.py) : Is main file run this file to see result 😊.
+> [CarCounting.py](CarCounting.py) : Run this file to see results😊.
 >
-Use following command.
+> .[main.py](main.py) : Main file Web GUI😊.
+>
+> [requirements.txt](requirements.txt) : All packages you need to install.
+ ---
+Use following command to run GUI version:
 ```shell
-python main.py
+streamlit run main.py
 ```
+
 That's all 🥳. 
