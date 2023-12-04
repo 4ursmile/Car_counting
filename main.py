@@ -5,6 +5,7 @@ import numpy as np
 from cvlib.object_detection import ObjectDetection
 from cvlib.tracker import EuclideanDistTracker
 import os
+import time
 
 def image_resize(img, dim):
     return cv2.resize(img, dim, interpolation=cv2.INTER_AREA)
@@ -55,7 +56,7 @@ with st.form("InputForm"):
     liner = l.number_input("Line", min_value=0.0, max_value=1.0, value=0.7, step=0.1)
     st.subheader("Limit queue")
     st.caption("The limit queue to avoid duplicate count")
-    limit_queue = st.number_input("Limit queue", min_value=0, max_value=1000, value=100, step=1)
+    limit_queue = st.number_input("Limit queue", min_value=5, max_value=10000, value=100, step=1)
     st.subheader("Frame cut option")
     st.caption("Cut the frame to reduce the number of frame to process")
     frameCut = st.checkbox("Frame cut", value=False)
@@ -96,14 +97,20 @@ if form_submitted:
         fps = video_capture.get(cv2.CAP_PROP_FPS)
         base_dis = delta
         dis_scalar = (targer_counter+1)/targer_counter if frameCut else 1
+        if not os.path.exists(f'Videos_ouput'):
+            os.makedirs(f'Videos_ouput')
         video_results = cv2.VideoWriter(f'Videos_ouput/result.avi',cv2.VideoWriter_fourcc('M','J','P','G'), fps, (width,height))
+
         line = int(cap_h*liner)
         st.button("Cancel", on_click=canceller.set)
+        frame_count, fps = st.empty(), st.empty()
         video_render = st.empty()
         progerss_bar = st.progress(0)
+        counter = 0;
         while True:
             if canceller():
                 form_submitted = False
+                canceller.reset()
                 break
             if frameCut:
                 if counter == targer_counter:
@@ -113,6 +120,7 @@ if form_submitted:
                 counter += 1
             ret, frame = video_capture.read()
             if ret:
+                tic = time.time()
                 frame = image_resize(frame, dim)
                 roi = frame[cap_y:cap_y + cap_h, cap_x:cap_x + cap_w]
                 results, classes, confs = detector.predict(roi, specific_class=take_class, conf = 0.3, iou = 0.3, threshold = 30, plot = False)
@@ -139,7 +147,10 @@ if form_submitted:
                 video_results.write(frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
+                toc = time.time()
+                time_taken = (toc-tic)
                 progerss_bar.progress(int(video_capture.get(cv2.CAP_PROP_POS_FRAMES)/video_capture.get(cv2.CAP_PROP_FRAME_COUNT)*100))
+                frame_count.text(f"Frame: {video_capture.get(cv2.CAP_PROP_POS_FRAMES):0.0f}/{video_capture.get(cv2.CAP_PROP_FRAME_COUNT):0.0f} | FPS: {1/time_taken:0.0f}")
             else:
                 break
         video_capture.release()
