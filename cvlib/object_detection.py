@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import os
+import torch
 from ultralytics import YOLO, RTDETR
 
 model_paths = {'yolov5n': './Models/YOLOV5N/weights/last.pt', 
@@ -12,7 +13,8 @@ class ObjectDetection:
     def __init__(self, model="yolov8n", device = None):
         if model not in model_support:
             raise Exception("Model not support")
-        
+        if device is None:
+            device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         print("Dectector model is loading...")
         self.model_path = os.path.abspath(model_paths[model])
         print("Model path: ", self.model_path)
