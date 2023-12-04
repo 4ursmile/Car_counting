@@ -100,10 +100,12 @@ if form_submitted:
         if not os.path.exists(f'Videos_ouput'):
             os.makedirs(f'Videos_ouput')
         video_results = cv2.VideoWriter(f'Videos_ouput/result.avi',cv2.VideoWriter_fourcc('M','J','P','G'), fps, (width,height))
-
         line = int(cap_h*liner)
+        ret, frame = video_capture.read()
+        light_mean_value = np.mean(frame)/255
         st.button("Cancel", on_click=canceller.set)
-        frame_count, fps = st.empty(), st.empty()
+        st.text(f"{'Night' if light_mean_value < 0.5 else 'Day'}")
+        frame_count, fps= st.empty(), st.empty()
         video_render = st.empty()
         progerss_bar = st.progress(0)
         counter = 0;
@@ -151,6 +153,7 @@ if form_submitted:
                 time_taken = (toc-tic)
                 progerss_bar.progress(int(video_capture.get(cv2.CAP_PROP_POS_FRAMES)/video_capture.get(cv2.CAP_PROP_FRAME_COUNT)*100))
                 frame_count.text(f"Frame: {video_capture.get(cv2.CAP_PROP_POS_FRAMES):0.0f}/{video_capture.get(cv2.CAP_PROP_FRAME_COUNT):0.0f} | FPS: {1/time_taken:0.0f}")
+
             else:
                 break
         video_capture.release()
